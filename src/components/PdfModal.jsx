@@ -13,22 +13,22 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute }) {
         overlay: {
           backgroundColor: "rgba(0, 0, 0, 0.6)", // Semi-transparent dark overlay
           zIndex: 9999,
+          display: "flex", // Use flexbox for centering
+          justifyContent: "center",
+          alignItems: "center",
         },
         content: {
-          top: "50%",
-          left: "50%",
-          right: "auto",
-          bottom: "auto",
-          marginRight: "-50%",
-          transform: "translate(-50%, -50%)",
-          width: "90%",
-          height: "90%",
+          position: "relative", // No absolute positioning
+          width: "90%", // Use a percentage to better fit the viewport
+          maxWidth: "1400px", // Fixed maximum width
+          height: "80%", // Use a percentage to fit the viewport
+          maxHeight: "700px", // Fixed maximum height to avoid scaling
           backgroundColor: "#fff", // White background for content
           borderRadius: "12px", // Rounded corners
           padding: "20px",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Subtle shadow for depth
-          transition: "opacity 0.3s ease-in-out", // Smooth transition
-          position: "relative", // Position relative to use for absolute positioning of button
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Subtle shadow for clarity
+          overflow: "hidden", // Remove overflow to prevent scrollbars
+          margin: "auto", // Center horizontally
         },
       }}
     >
@@ -62,8 +62,7 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute }) {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
-          height: "calc(100% - 60px)", // Adjust height to fit within content area, excluding the button
-          marginTop: "60px", // Adjust margin to make space for the button
+          height: "100%", // Full height for both the iframe and text area
           gap: "20px", // Space between the iframe and text area
         }}
       >
@@ -87,9 +86,10 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute }) {
             backgroundColor: "#f4f4f4", // Light background for the text area
             borderRadius: "8px", // Rounded corners
             padding: "20px", // Add padding inside the text area
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Subtle shadow for clarity
             color: "#333", // Dark text color
             overflowY: "auto", // Ensure scroll if text overflows
+            fontFamily: "Arial, sans-serif", // Clean font for legibility
           }}
         >
           <h2
@@ -108,7 +108,6 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute }) {
               color: "#555",
               lineHeight: "1.8",
               fontSize: "16px",
-              fontFamily: "Arial, sans-serif", // Set a clean font family
               paddingLeft: "20px", // Space for bullet points
               listStyleType: "disc", // Ensure bullet points are displayed
               margin: 0, // Reset margin to ensure bullet points are visible
