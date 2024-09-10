@@ -87,7 +87,7 @@ export const Hero = () => {
                       <button className="workBtn btn btn-light">My Work</button>
                     </a>
                     <a
-                      href="#contact"
+                      href="#footer"
                       style={{ textDecoration: "none", color: "white" }}
                     >
                       <button className=" contactBtn btn btn-outline-light">
