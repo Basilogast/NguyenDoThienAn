@@ -63,10 +63,10 @@ export const About = () => {
             <img src={slide_image_4} alt="slide_image" />
           </SwiperSlide>
           <SwiperSlide>
-            <img src={slide_image_5} alt="slide_image" />
+            <img src={slide_image_6} alt="slide_image" />
           </SwiperSlide>
           <SwiperSlide>
-            <img src={slide_image_6} alt="slide_image" />
+            <img src={slide_image_5} alt="slide_image" />
           </SwiperSlide>
           <SwiperSlide>
             <img src={slide_image_7} alt="slide_image" />
