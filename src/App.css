@@ -303,56 +303,112 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
 /************ Hero Css ************/
 .hero {
   width: 100vw;
-  /* position: absolute; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #121212; /* Dark background */
+  padding: 0 0;
+  color: #f5f5f5; /* Light text */
 }
 
 .heroImgContainer {
-  display: block;
-}
-
-.hero .textRotate {
-  font-size: 20px;
-  margin: 0;
-}
-
-.hero h1 {
-  font-size: 60px;
-  margin-bottom: 15px;
-}
-
-.hero .Para {
-  font-size: 20px;
-  max-width: 600px;
-}
-
-.hero .workBtn {
-  border-radius: 30px;
-  margin: 5px;
-  font-size: 20px;
-  padding: 10px 30px;
-}
-
-.hero .contactBtn {
-  color: white;
-  border-color: white;
-  border-radius: 30px;
-  margin: 5px;
-  font-size: 20px;
-  padding: 10px 30px;
-}
-
-.hero .heroImgContainer{
   height: 100vh;
   overflow: hidden;
   display: flex;
   justify-content: center;
-  /* float: right; */
+  transition: transform 0.5s ease-in-out;
 }
 
-.hero .heroImgContainer img{
+.heroImgContainer img {
+  height: 100vh;
+  width: auto;
+  transition: transform 0.5s ease-in-out, opacity 0.5s;
+}
+
+.heroImgContainer:hover img {
+  transform: scale(1.1); /* Zoom effect */
+  opacity: 0.8; /* Slight fade effect */
+}
+
+.hero .textRotate {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #f5f5f5; /* Light color for rotating text */
+}
+
+.hero h1 {
+  font-size: 64px;
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.hero .Para {
+  font-size: 22px;
+  max-width: 600px;
+  color: #e0e0e0; /* Slightly lighter text */
+  margin-bottom: 40px; /* Increased margin for better spacing */
+}
+
+.hero .workBtn,
+.hero .contactBtn {
+  border-radius: 30px;
+  font-size: 20px;
+  padding: 12px 35px;
+  margin-right: 20px; /* Increased space between buttons */
+  transition: all 0.4s ease-in-out;
+}
+
+.hero .workBtn {
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+}
+
+.hero .workBtn:hover {
+  background-color: #000000;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.hero .contactBtn {
+  color: #fff;
+  border: 2px solid #fff;
+  background: transparent;
+}
+
+.hero .contactBtn:hover {
+  background-color: #000000;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.hero .heroImgContainer {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+.hero .heroImgContainer img {
   height: 100vh;
   width: auto;
 }
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 48px;
+  }
+
+  .hero .Para {
+    font-size: 18px;
+  }
+
+  .heroImgContainer img {
+    height: 60vh;
+  }
+}
+
 
 /************ About Css ************/
 .about{

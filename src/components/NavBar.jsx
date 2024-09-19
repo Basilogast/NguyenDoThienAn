@@ -38,7 +38,7 @@ export const NavBar = () => {
           <Container>
             <Navbar.Brand href="/NguyenDoThienAn/">
                 <div className="navLogoContainer">
-                  An The Accountant
+                  An The Marketer
                     {/* <img src={logo} alt="Logo" /> */}
                 </div>
             </Navbar.Brand>
