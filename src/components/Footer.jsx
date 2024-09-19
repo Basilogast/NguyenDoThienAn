@@ -56,7 +56,7 @@ export const Footer = () => {
       <Container>
         <Row className="d-flex">
           <Col xs={12} md={4} xl={4}>
-            <img src={star} alt="star" />
+            {/* <img src={star} alt="star" /> */}
             <h2>
               Work <br />
               with me
