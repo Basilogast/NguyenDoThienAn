@@ -7,7 +7,7 @@ import LYN from "../assets/img/works/LYN.png";
 import HP from "../assets/img/works/HP.png";
 import OTEKER from "../assets/img/works/workpage/OTEKER/4.1.mp4";
 import HONGKONG from "../assets/img/works/HONGKONG.png";
-import HONGKONG2 from "../assets/img/works/workpage/HONGKONG/TIKTOK/Hukha.1.mp4";
+import HONGKONG2 from "../assets/img/works/workpage/HONGKONG/GDN/GDN1.png";
 import CELA from "../assets/img/works/CELA.png";
 import DALMORE from "../assets/img/works/DALMORE.png";
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PdfModal from './PdfModal'; // Import the PdfModal component
 
-function WorkCard(props) {
+function WorkCard({ img, text, size, pdfUrl, textPara, detailsRoute }) {
     const [hover, setHover] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false); // Track if the modal is open
 
@@ -14,11 +14,18 @@ function WorkCard(props) {
     };
 
     const cardStyles = {
-        ...styles.card,
-        ...styles[props.size],
+        margin: '15px 10px',
+        padding: 0,
+        borderRadius: '16px',
         position: 'relative',
         overflow: 'hidden',
         cursor: 'pointer',
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+        boxShadow: hover
+            ? '0 8px 15px rgba(0, 0, 0, 0.3)' // Enhanced shadow on hover
+            : '0 4px 6px rgba(0, 0, 0, 0.1)', // Default shadow
+        transform: hover ? 'scale(1.05)' : 'scale(1)', // Enlarge effect on hover
+        gridRowEnd: size === 'small' ? 'span 26' : size === 'medium' ? 'span 33' : 'span 45',
     };
 
     const mediaStyles = {
@@ -29,7 +36,7 @@ function WorkCard(props) {
         top: 0,
         left: 0,
         zIndex: 1,
-        filter: hover ? 'brightness(50%)' : 'brightness(100%)',
+        filter: hover ? 'brightness(60%)' : 'brightness(100%)', // Darken on hover
         transition: 'all 0.3s ease-in-out',
     };
 
@@ -56,20 +63,20 @@ function WorkCard(props) {
                 onClick={handleCardClick} // Trigger modal opening on click
             >
                 {/* Display video if the source is video, otherwise display image */}
-                {isVideo(props.img) ? (
-                    <video style={mediaStyles} src={props.img} autoPlay loop muted />
+                {isVideo(img) ? (
+                    <video style={mediaStyles} src={img} autoPlay loop muted />
                 ) : (
                     <div
                         style={{
                             ...mediaStyles,
-                            backgroundImage: `url(${props.img})`,
+                            backgroundImage: `url(${img})`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                         }}
                     />
                 )}
                 <div style={textStyles}>
-                    {props.text || 'Hover Text'}
+                    {text || 'Hover Text'}
                 </div>
             </div>
 
@@ -77,29 +84,13 @@ function WorkCard(props) {
             <PdfModal
                 isOpen={isModalOpen}
                 onRequestClose={() => setIsModalOpen(false)}
-                pdfUrl={props.pdfUrl} // Pass the PDF URL as a prop
-                text={props.textPara}
-                detailsRoute={props.detailsRoute} // Pass the details route as a prop
+                pdfUrl={pdfUrl} // Pass the PDF URL as a prop
+                text={textPara}
+                detailsRoute={detailsRoute} // Pass the details route as a prop
             />
         </>
     );
 }
 
-const styles = {
-    card: {
-        margin: '15px 10px',
-        padding: 0,
-        borderRadius: '16px',
-    },
-    small: {
-        gridRowEnd: 'span 26',
-    },
-    medium: {
-        gridRowEnd: 'span 33',
-    },
-    large: {
-        gridRowEnd: 'span 45',
-    },
-};
-
 export default WorkCard;
+

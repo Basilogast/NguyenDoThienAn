@@ -378,8 +378,8 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
 }
 
 .hero .contactBtn:hover {
-  background-color: #000000;
-  color: #fff;
+  background-color: #ffffff;
+  color: #000000;
   transform: scale(1.1);
 }
 
