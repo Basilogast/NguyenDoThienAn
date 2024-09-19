@@ -10,7 +10,7 @@ export const Hero = () => {
   const [text, setText] = useState("");
   const [delta, setDelta] = useState(300 - Math.random() * 100);
   const [index, setIndex] = useState(1);
-  const toRotate = ["an Accountant", "a Marketing Specialist", "a Freelancer"];
+  const toRotate = ["an Account Executive", "a Marketing Specialist", "a Enthusiast"];
   const period = 2000;
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export const Hero = () => {
                       <span
                         className="txt-rotate"
                         dataPeriod="1000"
-                        data-rotate='[ "an Accountant", "a Marketing Specialist", "a Freelancer" ]'
+                        data-rotate='[ "an Account Executive", "a Marketing Specialist", "a Enthusiast" ]'
                       >
                         <span className="wrap">{text}</span>
                       </span>
