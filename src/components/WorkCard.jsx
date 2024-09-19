@@ -1,9 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PdfModal from './PdfModal'; // Import the PdfModal component
 
 function WorkCard(props) {
     const [hover, setHover] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false); // Track if the modal is open
+    const [mediaUrl, setMediaUrl] = useState(''); // Initialize media URL
+    const [pdfUrl, setPdfUrl] = useState(''); // Initialize PDF URL
+
+    useEffect(() => {
+        // Clean up object URLs when the component unmounts or props change
+        if (mediaUrl) URL.revokeObjectURL(mediaUrl);
+        if (pdfUrl) URL.revokeObjectURL(pdfUrl);
+
+        // Create object URLs only if the props are File objects
+        if (props.img instanceof File) {
+            setMediaUrl(URL.createObjectURL(props.img));
+        } else {
+            setMediaUrl(props.img || ''); // Use the URL directly if it's not a File object
+        }
+
+        if (props.pdfUrl instanceof File) {
+            setPdfUrl(URL.createObjectURL(props.pdfUrl));
+        } else {
+            setPdfUrl(props.pdfUrl || ''); // Use the URL directly if it's not a File object
+        }
+
+        return () => {
+            // Clean up object URLs when the component unmounts
+            if (mediaUrl) URL.revokeObjectURL(mediaUrl);
+            if (pdfUrl) URL.revokeObjectURL(pdfUrl);
+        };
+    }, [props.img, props.pdfUrl]);
 
     const handleCardClick = () => {
         setIsModalOpen(true); // Open the modal when the card is clicked
@@ -56,13 +83,13 @@ function WorkCard(props) {
                 onClick={handleCardClick} // Trigger modal opening on click
             >
                 {/* Display video if the source is video, otherwise display image */}
-                {isVideo(props.img) ? (
-                    <video style={mediaStyles} src={props.img} autoPlay loop muted />
+                {isVideo(mediaUrl) ? (
+                    <video style={mediaStyles} src={mediaUrl} autoPlay loop muted />
                 ) : (
                     <div
                         style={{
                             ...mediaStyles,
-                            backgroundImage: `url(${props.img})`,
+                            backgroundImage: `url(${mediaUrl})`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                         }}
@@ -77,7 +104,7 @@ function WorkCard(props) {
             <PdfModal
                 isOpen={isModalOpen}
                 onRequestClose={() => setIsModalOpen(false)}
-                pdfUrl={props.pdfUrl} // Pass the PDF URL as a prop
+                pdfUrl={pdfUrl} // Pass the PDF URL as a prop
                 text={props.textPara}
                 detailsRoute={props.detailsRoute} // Pass the details route as a prop
             />

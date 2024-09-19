@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 Modal.setAppElement("#root"); // Ensure accessibility by setting the root element for modals
 
 function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute }) {
+  // Convert text to an array if it's not already
+  const textArray = Array.isArray(text) ? text : text ? [text] : [];
+
   return (
     <Modal
       isOpen={isOpen}
@@ -113,7 +116,9 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute }) {
               margin: 0, // Reset margin to ensure bullet points are visible
             }}
           >
-            {text && text.map((item, index) => <li key={index}>{item}</li>)}
+            {textArray.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
           </ul>
           {/* Conditionally render the "View in Detail" link if detailsRoute is not empty or undefined */}
           {detailsRoute && detailsRoute.trim() !== "" && (
