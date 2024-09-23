@@ -5,32 +5,32 @@ function WorkCard({ img, text, size, pdfUrl, textPara, detailsRoute }) {
     const [hover, setHover] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false); // Track if the modal is open
     const [mediaUrl, setMediaUrl] = useState(''); // Initialize media URL
-    const [pdfUrl, setPdfUrl] = useState(''); // Initialize PDF URL
+    const [pdfUrlState, setPdfUrlState] = useState(''); // Rename state variable to avoid conflict with prop pdfUrl
 
     useEffect(() => {
         // Clean up object URLs when the component unmounts or props change
         if (mediaUrl) URL.revokeObjectURL(mediaUrl);
-        if (pdfUrl) URL.revokeObjectURL(pdfUrl);
+        if (pdfUrlState) URL.revokeObjectURL(pdfUrlState);
 
         // Create object URLs only if the props are File objects
-        if (props.img instanceof File) {
-            setMediaUrl(URL.createObjectURL(props.img));
+        if (img instanceof File) {
+            setMediaUrl(URL.createObjectURL(img));
         } else {
-            setMediaUrl(props.img || ''); // Use the URL directly if it's not a File object
+            setMediaUrl(img || ''); // Use the URL directly if it's not a File object
         }
 
-        if (props.pdfUrl instanceof File) {
-            setPdfUrl(URL.createObjectURL(props.pdfUrl));
+        if (pdfUrl instanceof File) {
+            setPdfUrlState(URL.createObjectURL(pdfUrl));
         } else {
-            setPdfUrl(props.pdfUrl || ''); // Use the URL directly if it's not a File object
+            setPdfUrlState(pdfUrl || ''); // Use the URL directly if it's not a File object
         }
 
         return () => {
             // Clean up object URLs when the component unmounts
             if (mediaUrl) URL.revokeObjectURL(mediaUrl);
-            if (pdfUrl) URL.revokeObjectURL(pdfUrl);
+            if (pdfUrlState) URL.revokeObjectURL(pdfUrlState);
         };
-    }, [props.img, props.pdfUrl]);
+    }, [img, pdfUrl]);
 
     const handleCardClick = () => {
         setIsModalOpen(true); // Open the modal when the card is clicked
@@ -111,13 +111,12 @@ function WorkCard({ img, text, size, pdfUrl, textPara, detailsRoute }) {
             <PdfModal
                 isOpen={isModalOpen}
                 onRequestClose={() => setIsModalOpen(false)}
-                pdfUrl={pdfUrl} // Pass the PDF URL as a prop
-                text={props.textPara}
-                detailsRoute={props.detailsRoute} // Pass the details route as a prop
+                pdfUrl={pdfUrlState} // Pass the updated PDF URL state
+                text={textPara}
+                detailsRoute={detailsRoute} // Pass the details route as a prop
             />
         </>
     );
 }
 
 export default WorkCard;
-
