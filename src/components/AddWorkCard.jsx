@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 export const AddWorkCard = ({ addNewWorkCard }) => {
   const [workData, setWorkData] = useState({
-    img: null,
+    img: "",
     text: "",
     textPara: "",
-    pdfUrl: null,
+    pdfUrl: "",
     detailsRoute: "",
     size: "small", // Default size
   });
@@ -32,9 +32,15 @@ export const AddWorkCard = ({ addNewWorkCard }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Ensure addNewWorkCard is a function
-    if (typeof addNewWorkCard === 'function') {
-      addNewWorkCard(workData);
+    // Convert textPara to an array (split by commas)
+    const workDataToSend = {
+      ...workData,
+      textPara: workData.textPara.split(","), // Split by comma to match array format
+    };
+
+    // Ensure addNewWorkCard is a function and submit the form
+    if (typeof addNewWorkCard === "function") {
+      addNewWorkCard(workDataToSend);
     } else {
       console.error("addNewWorkCard is not a function");
     }
