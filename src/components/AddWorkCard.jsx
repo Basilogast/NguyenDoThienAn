@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+// import "./AddWorkCard.css"; // Add custom styles here
 
 export const AddWorkCard = ({ addNewWorkCard }) => {
   const [workData, setWorkData] = useState({
-    img: "",
     text: "",
     textPara: "",
-    pdfUrl: "",
     detailsRoute: "",
     size: "small", // Default size
   });
+
+  const [imgFile, setImgFile] = useState(null); // Separate state for image file
+  const [pdfFile, setPdfFile] = useState(null); // Separate state for PDF file
 
   const navigate = useNavigate();
 
@@ -24,34 +26,48 @@ export const AddWorkCard = ({ addNewWorkCard }) => {
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setWorkData({
-      ...workData,
-      [name]: files[0],
-    });
+    if (name === "img") {
+      setImgFile(files[0]); // Set the image file
+    } else if (name === "pdfUrl") {
+      setPdfFile(files[0]); // Set the PDF file
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Convert textPara to an array (split by commas)
+
     const workDataToSend = {
       ...workData,
       textPara: workData.textPara.split(","), // Split by comma to match array format
     };
 
-    // Ensure addNewWorkCard is a function and submit the form
+    const formData = new FormData();
+    formData.append("text", workDataToSend.text);
+    formData.append("textPara", workDataToSend.textPara);
+    formData.append("detailsRoute", workDataToSend.detailsRoute);
+    formData.append("size", workDataToSend.size);
+
+    if (imgFile) {
+      formData.append("img", imgFile);
+    }
+    if (pdfFile) {
+      formData.append("pdfUrl", pdfFile);
+    }
+
     if (typeof addNewWorkCard === "function") {
-      addNewWorkCard(workDataToSend);
+      addNewWorkCard(formData); // Pass FormData to the backend
     } else {
       console.error("addNewWorkCard is not a function");
     }
+
     navigate("/NguyenDoThienAn/");
   };
 
   return (
-    <Container>
-      <h2>Add a New Work Card</h2>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="formWorkTitle">
+    <Container className="add-workcard-container">
+      <h2 className="form-title">Add a New Work Card</h2>
+      <Form onSubmit={handleSubmit} className="custom-form">
+        <Form.Group controlId="formWorkTitle" className="form-group">
           <Form.Label>Work Title</Form.Label>
           <Form.Control
             type="text"
@@ -63,7 +79,7 @@ export const AddWorkCard = ({ addNewWorkCard }) => {
           />
         </Form.Group>
 
-        <Form.Group controlId="formWorkTextPara">
+        <Form.Group controlId="formWorkTextPara" className="form-group">
           <Form.Label>Description (Comma separated list)</Form.Label>
           <Form.Control
             as="textarea"
@@ -76,7 +92,7 @@ export const AddWorkCard = ({ addNewWorkCard }) => {
           />
         </Form.Group>
 
-        <Form.Group controlId="formWorkImage">
+        <Form.Group controlId="formWorkImage" className="form-group">
           <Form.Label>Image</Form.Label>
           <Form.Control
             type="file"
@@ -87,7 +103,7 @@ export const AddWorkCard = ({ addNewWorkCard }) => {
           />
         </Form.Group>
 
-        <Form.Group controlId="formWorkPdf">
+        <Form.Group controlId="formWorkPdf" className="form-group">
           <Form.Label>PDF File</Form.Label>
           <Form.Control
             type="file"
@@ -97,7 +113,7 @@ export const AddWorkCard = ({ addNewWorkCard }) => {
           />
         </Form.Group>
 
-        <Form.Group controlId="formDetailsRoute">
+        <Form.Group controlId="formDetailsRoute" className="form-group">
           <Form.Label>Details Route</Form.Label>
           <Form.Control
             type="text"
@@ -108,7 +124,7 @@ export const AddWorkCard = ({ addNewWorkCard }) => {
           />
         </Form.Group>
 
-        <Form.Group controlId="formWorkSize">
+        <Form.Group controlId="formWorkSize" className="form-group">
           <Form.Label>Card Size</Form.Label>
           <Form.Control
             as="select"
@@ -122,7 +138,7 @@ export const AddWorkCard = ({ addNewWorkCard }) => {
           </Form.Control>
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button variant="primary" type="submit" className="submit-btn">
           Add WorkCard
         </Button>
       </Form>

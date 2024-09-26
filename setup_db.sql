@@ -2,7 +2,7 @@
 CREATE DATABASE workcardsdb;
 
 -- Create a new user with a password
-CREATE USER workcardsuser WITH ENCRYPTED PASSWORD 'yourpassword';
+CREATE USER workcardsuser WITH ENCRYPTED PASSWORD 'Hung08112003';
 
 -- Grant all privileges on the new database to the new user
 GRANT ALL PRIVILEGES ON DATABASE workcardsdb TO workcardsuser;

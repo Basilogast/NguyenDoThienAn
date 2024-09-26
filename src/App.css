@@ -698,5 +698,52 @@ iframe {
   word-break: break-all;     /* For breaking long words in older browsers */
 }
 
+/************ AddWorkCard Css ************/
+.add-workcard-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.custom-form .form-group {
+  margin-bottom: 15px;
+}
+
+.custom-form .form-control {
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.custom-form .submit-btn {
+  display: block;
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.custom-form .submit-btn:hover {
+  background-color: #0056b3;
+}
+
+.custom-form .form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
 
 

@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Modal from "react-modal";
 import { Link } from "react-router-dom";
 
-Modal.setAppElement("#root"); // Ensure accessibility by setting the root element for modals
+Modal.setAppElement("#root");
 
 function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute }) {
-  // Convert text to an array if it's not already
-  const textArray = Array.isArray(text) ? text : text ? [text] : [];
+  // Initialize textArray directly from text if it's an array
+  const textArray = Array.isArray(text) ? text : [];
+
+  useEffect(() => {
+    if (pdfUrl) {
+      console.log("PDF URL passed to PdfModal:", pdfUrl);
+    }
+  }, [pdfUrl]);
 
   return (
     <Modal
@@ -14,24 +20,24 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute }) {
       onRequestClose={onRequestClose}
       style={{
         overlay: {
-          backgroundColor: "rgba(0, 0, 0, 0.6)", // Semi-transparent dark overlay
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
           zIndex: 9999,
-          display: "flex", // Use flexbox for centering
+          display: "flex",
           justifyContent: "center",
           alignItems: "center",
         },
         content: {
-          position: "relative", // No absolute positioning
-          width: "90%", // Use a percentage to better fit the viewport
-          maxWidth: "1400px", // Fixed maximum width
-          height: "80%", // Use a percentage to fit the viewport
-          maxHeight: "700px", // Fixed maximum height to avoid scaling
-          backgroundColor: "#fff", // White background for content
-          borderRadius: "12px", // Rounded corners
+          position: "relative",
+          width: "90%",
+          maxWidth: "1400px",
+          height: "80%",
+          maxHeight: "700px",
+          backgroundColor: "#fff",
+          borderRadius: "12px",
           padding: "20px",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Subtle shadow for clarity
-          overflow: "hidden", // Remove overflow to prevent scrollbars
-          margin: "auto", // Center horizontally
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          overflow: "hidden",
+          margin: "auto",
         },
       }}
     >
@@ -44,18 +50,14 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute }) {
           padding: "10px 15px",
           borderRadius: "4px",
           cursor: "pointer",
-          position: "absolute", // Absolute positioning to place it at the top-right
-          top: "20px", // Distance from the top
-          right: "20px", // Distance from the right
+          position: "absolute",
+          top: "20px",
+          right: "20px",
           fontSize: "16px",
-          transition: "background-color 0.3s ease-in-out", // Smooth background color transition
+          transition: "background-color 0.3s ease-in-out",
         }}
-        onMouseEnter={(e) =>
-          (e.currentTarget.style.backgroundColor = "#ff3b3b")
-        } // Darker red on hover
-        onMouseLeave={(e) =>
-          (e.currentTarget.style.backgroundColor = "#ff5c5c")
-        } // Original red
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#ff3b3b")}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#ff5c5c")}
       >
         Close
       </button>
@@ -65,8 +67,8 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute }) {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
-          height: "100%", // Full height for both the iframe and text area
-          gap: "20px", // Space between the iframe and text area
+          height: "100%",
+          gap: "20px",
         }}
       >
         <div style={{ flex: 1, position: "relative" }}>
@@ -76,7 +78,7 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute }) {
               width: "100%",
               height: "100%",
               border: "none",
-              borderRadius: "8px", // Rounded corners for the iframe
+              borderRadius: "8px",
             }}
             title="PDF Preview"
           ></iframe>
@@ -86,22 +88,22 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute }) {
           style={{
             flex: 1,
             maxWidth: "400px",
-            backgroundColor: "#f4f4f4", // Light background for the text area
-            borderRadius: "8px", // Rounded corners
-            padding: "20px", // Add padding inside the text area
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Subtle shadow for clarity
-            color: "#333", // Dark text color
-            overflowY: "auto", // Ensure scroll if text overflows
-            fontFamily: "Arial, sans-serif", // Clean font for legibility
+            backgroundColor: "#f4f4f4",
+            borderRadius: "8px",
+            padding: "20px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            color: "#333",
+            overflowY: "auto",
+            fontFamily: "Arial, sans-serif",
           }}
         >
           <h2
             style={{
               marginTop: 0,
-              color: "#222", // Darker color for the heading
-              fontSize: "2em", // Larger font size for the heading
+              color: "#222",
+              fontSize: "2em",
               fontWeight: "bold",
-              marginBottom: "20px", // Space below the heading
+              marginBottom: "20px",
             }}
           >
             Scope of Work (SOW)
@@ -111,16 +113,16 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute }) {
               color: "#555",
               lineHeight: "1.8",
               fontSize: "16px",
-              paddingLeft: "20px", // Space for bullet points
-              listStyleType: "disc", // Ensure bullet points are displayed
-              margin: 0, // Reset margin to ensure bullet points are visible
+              paddingLeft: "20px",
+              listStyleType: "disc",
+              margin: 0,
             }}
           >
             {textArray.map((item, index) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
-          {/* Conditionally render the "View in Detail" link if detailsRoute is not empty or undefined */}
+
           {detailsRoute && detailsRoute.trim() !== "" && (
             <div style={{ marginTop: "20px", textAlign: "center" }}>
               <Link

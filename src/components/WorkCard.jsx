@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PdfModal from './PdfModal'; // Import the PdfModal component
 
 function WorkCard({ img, text, size, pdfUrl, textPara, detailsRoute }) {
+    // console.log("WorkCard received textPara:", textPara);
     const [hover, setHover] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false); // Track if the modal is open
     const [mediaUrl, setMediaUrl] = useState(''); // Initialize media URL
