@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PdfModal from './PdfModal'; // Import the PdfModal component
 
-function WorkCard({ img, text, size, pdfUrl, textPara, detailsRoute }) {
+function WorkCard({ id, img, text, size, pdfUrl, textPara, detailsRoute }) {
     // console.log("WorkCard received textPara:", textPara);
     const [hover, setHover] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false); // Track if the modal is open
@@ -115,6 +115,7 @@ function WorkCard({ img, text, size, pdfUrl, textPara, detailsRoute }) {
                 pdfUrl={pdfUrlState} // Pass the updated PDF URL state
                 text={textPara}
                 detailsRoute={detailsRoute} // Pass the details route as a prop
+                id={id}
             />
         </>
     );

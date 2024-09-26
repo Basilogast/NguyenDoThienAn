@@ -9,6 +9,7 @@ import { About } from "./components/About";
 import { Client } from "./components/Client";
 import { Work } from "./components/Work";
 import { AddWorkCard } from "./components/AddWorkCard";
+import EditWorkCard from './components/EditWorkCard';
 import { Footer } from "./components/Footer";
 
 function App() {
@@ -23,7 +24,6 @@ function App() {
       })
       .catch((error) => console.error("Error fetching workcards:", error));
   }, []);
-  
 
   // Function to add a new workcard to the state and backend
   const addNewWorkCard = (formData) => {
@@ -58,7 +58,7 @@ function App() {
     <Router>
       <Routes>
         <Route
-          path="/NguyenDoThienAn"
+          path="/NguyenDoThienAn/"
           element={
             <div className="App">
               <NavBar />
@@ -75,6 +75,15 @@ function App() {
           element={
             <div className="App">
               <AddWorkCard addNewWorkCard={addNewWorkCard} />
+              <Footer />
+            </div>
+          }
+        />
+        <Route
+          path="/NguyenDoThienAn/edit-work/:id"
+          element={
+            <div className="App">
+              <EditWorkCard />
               <Footer />
             </div>
           }

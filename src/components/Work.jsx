@@ -34,7 +34,23 @@ export const Work = ({ workCards }) => {
       justifyContent: "center",
       margin: "20px 0",
     },
+    buttonStyle: {
+      padding: "15px 30px",
+      fontSize: "20px",
+      fontWeight: "bold",
+      borderRadius: "8px",
+      backgroundColor: "#007bff",
+      color: "#fff",
+      border: "none",
+      transition: "all 0.3s ease",
+    },
+    buttonHover: {
+      backgroundColor: "#0056b3",
+      transform: "scale(1.05)",
+    },
   };
+
+  const [hover, setHover] = React.useState(false);
 
   return (
     <section className="work" id="work">
@@ -47,7 +63,16 @@ export const Work = ({ workCards }) => {
         {/* Button to link to AddWorkCard component */}
         <div style={styles.buttonContainer}>
           <Link to="/NguyenDoThienAn/add-work">
-            <Button variant="primary">Add New Work</Button>
+            <Button
+              style={{
+                ...styles.buttonStyle,
+                ...(hover ? styles.buttonHover : {}),
+              }}
+              onMouseEnter={() => setHover(true)}
+              onMouseLeave={() => setHover(false)}
+            >
+              Add New Work
+            </Button>
           </Link>
         </div>
 
@@ -59,6 +84,7 @@ export const Work = ({ workCards }) => {
             return (
               <WorkCard
                 key={index}
+                id={card.id}
                 size={card.size}
                 img={card.img}
                 text={card.text}

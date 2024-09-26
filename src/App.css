@@ -518,7 +518,7 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
   margin-bottom: 40px; /* Increased space below paragraphs */
 }
 
-.workPage .btnHome {
+.btnHome {
   display: inline-block;
   background-color: #007bff; /* Blue background */
   color: #fff; /* White text */
@@ -699,51 +699,95 @@ iframe {
 }
 
 /************ AddWorkCard Css ************/
+.add-workcard-container p {
+  font-size: 16px; /* Ensure the text is large enough */
+  color: #333; /* Ensure the text color contrasts with the background */
+}
 .add-workcard-container {
   max-width: 600px;
   margin: 50px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  background-color: #f0f0f0;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.form-title {
+/* Container hover effect */
+.add-workcard-container:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Form Title */
+.add-workcard-container .form-title {
   text-align: center;
-  font-size: 28px;
-  margin-bottom: 20px;
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 25px;
   color: #333;
+  letter-spacing: 1px;
 }
 
-.custom-form .form-group {
-  margin-bottom: 15px;
+/* Form Group Styling */
+.add-workcard-container .custom-form .form-group {
+  margin-bottom: 20px;
 }
 
-.custom-form .form-control {
-  border-radius: 5px;
-  padding: 10px;
+/* Input and Textarea Styling */
+.add-workcard-container .custom-form .form-control {
+  border-radius: 6px;
+  padding: 15px;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.custom-form .submit-btn {
+/* Input Hover and Focus Effects */
+.add-workcard-container .custom-form .form-control:hover {
+  background-color: #e9f7ff;
+}
+
+.add-workcard-container .custom-form .form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
+  background-color: #f9f9f9;
+}
+
+/* Button Styling */
+.add-workcard-container .custom-form .submit-btn {
   display: block;
   width: 100%;
   background-color: #007bff;
   color: white;
-  padding: 10px;
-  font-size: 18px;
+  padding: 12px;
+  font-size: 20px;
+  font-weight: bold;
   border: none;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.custom-form .submit-btn:hover {
+/* Button Hover Effect */
+.add-workcard-container .custom-form .submit-btn:hover {
   background-color: #0056b3;
+  transform: translateY(-3px);
 }
 
-.custom-form .form-control:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+/* Larger Select Dropdown */
+.add-workcard-container .custom-form select.form-control {
+  font-size: 18px;
+  padding: 10px;
 }
+
+/* Input Labels */
+.add-workcard-container .custom-form .form-label {
+  font-size: 20px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
 
 
 

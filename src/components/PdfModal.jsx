@@ -1,18 +1,41 @@
 import React, { useEffect } from "react";
 import Modal from "react-modal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
-function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute }) {
-  // Initialize textArray directly from text if it's an array
+function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute, id }) {
   const textArray = Array.isArray(text) ? text : [];
+  const navigate = useNavigate(); // Hook for navigation
 
   useEffect(() => {
     if (pdfUrl) {
       console.log("PDF URL passed to PdfModal:", pdfUrl);
     }
   }, [pdfUrl]);
+
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/workcards/${id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        alert("Workcard deleted successfully");
+        onRequestClose(); // Close the modal after deletion
+        window.location.reload(); // Refresh the page or you can use a state to update the UI
+      } else {
+        alert("Failed to delete workcard");
+      }
+    } catch (error) {
+      console.error("Error deleting workcard:", error);
+      alert("An error occurred while deleting the workcard");
+    }
+  };
+
+  const handleEdit = () => {
+    // Redirect to the edit page with the workcard ID
+    navigate(`/NguyenDoThienAn/edit-work/${id}`);
+  };
 
   return (
     <Modal
@@ -138,6 +161,48 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute }) {
               </Link>
             </div>
           )}
+
+          {/* Edit Button */}
+          <div style={{ marginTop: "30px", textAlign: "center" }}>
+            <button
+              onClick={handleEdit}
+              style={{
+                backgroundColor: "#28a745",
+                color: "white",
+                border: "none",
+                padding: "10px 20px",
+                borderRadius: "5px",
+                fontSize: "16px",
+                cursor: "pointer",
+                transition: "background-color 0.3s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#218838")}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#28a745")}
+            >
+              Edit WorkCard
+            </button>
+          </div>
+
+          {/* Delete Button */}
+          <div style={{ marginTop: "30px", textAlign: "center" }}>
+            <button
+              onClick={handleDelete}
+              style={{
+                backgroundColor: "#dc3545",
+                color: "white",
+                border: "none",
+                padding: "10px 20px",
+                borderRadius: "5px",
+                fontSize: "16px",
+                cursor: "pointer",
+                transition: "background-color 0.3s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#c82333")}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#dc3545")}
+            >
+              Delete WorkCard
+            </button>
+          </div>
         </div>
       </div>
     </Modal>
