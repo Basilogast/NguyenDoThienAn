@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
-function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute, id }) {
+function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute, id, signedInUser }) {
   const textArray = Array.isArray(text) ? text : [];
   const navigate = useNavigate(); // Hook for navigation
 
@@ -162,47 +162,52 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute, id }) {
             </div>
           )}
 
-          {/* Edit Button */}
-          <div style={{ marginTop: "30px", textAlign: "center" }}>
-            <button
-              onClick={handleEdit}
-              style={{
-                backgroundColor: "#28a745",
-                color: "white",
-                border: "none",
-                padding: "10px 20px",
-                borderRadius: "5px",
-                fontSize: "16px",
-                cursor: "pointer",
-                transition: "background-color 0.3s ease",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#218838")}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#28a745")}
-            >
-              Edit WorkCard
-            </button>
-          </div>
+          {/* Conditionally render Edit and Delete buttons if user is signed in */}
+          {signedInUser && (
+            <>
+              {/* Edit Button */}
+              <div style={{ marginTop: "30px", textAlign: "center" }}>
+                <button
+                  onClick={handleEdit}
+                  style={{
+                    backgroundColor: "#28a745",
+                    color: "white",
+                    border: "none",
+                    padding: "10px 20px",
+                    borderRadius: "5px",
+                    fontSize: "16px",
+                    cursor: "pointer",
+                    transition: "background-color 0.3s ease",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#218838")}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#28a745")}
+                >
+                  Edit WorkCard
+                </button>
+              </div>
 
-          {/* Delete Button */}
-          <div style={{ marginTop: "30px", textAlign: "center" }}>
-            <button
-              onClick={handleDelete}
-              style={{
-                backgroundColor: "#dc3545",
-                color: "white",
-                border: "none",
-                padding: "10px 20px",
-                borderRadius: "5px",
-                fontSize: "16px",
-                cursor: "pointer",
-                transition: "background-color 0.3s ease",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#c82333")}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#dc3545")}
-            >
-              Delete WorkCard
-            </button>
-          </div>
+              {/* Delete Button */}
+              <div style={{ marginTop: "30px", textAlign: "center" }}>
+                <button
+                  onClick={handleDelete}
+                  style={{
+                    backgroundColor: "#dc3545",
+                    color: "white",
+                    border: "none",
+                    padding: "10px 20px",
+                    borderRadius: "5px",
+                    fontSize: "16px",
+                    cursor: "pointer",
+                    transition: "background-color 0.3s ease",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#c82333")}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#dc3545")}
+                >
+                  Delete WorkCard
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </Modal>

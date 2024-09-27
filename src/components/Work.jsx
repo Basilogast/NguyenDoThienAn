@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import WorkCard from "./WorkCard";
@@ -17,7 +17,9 @@ import HKpdf from "../assets/pdf/Hong Kong MX Moon Cake x The Lamp.pdf";
 import CELApdf from "../assets/pdf/CELADON BOULEVARD_DIGITAL PROPOSAL 2024.pdf";
 import DALpdf from "../assets/pdf/_Internal_Catalyst_2024.pdf";
 
-export const Work = ({ workCards }) => {
+export const Work = ({ workCards, signedInUser }) => {
+  const [hover, setHover] = useState(false);
+
   const styles = {
     pin_container: {
       margin: "0 auto",
@@ -50,8 +52,6 @@ export const Work = ({ workCards }) => {
     },
   };
 
-  const [hover, setHover] = React.useState(false);
-
   return (
     <section className="work" id="work">
       <Container>
@@ -60,40 +60,38 @@ export const Work = ({ workCards }) => {
           <hr />
         </div>
 
-        {/* Button to link to AddWorkCard component */}
-        <div style={styles.buttonContainer}>
-          <Link to="/NguyenDoThienAn/add-work">
-            <Button
-              style={{
-                ...styles.buttonStyle,
-                ...(hover ? styles.buttonHover : {}),
-              }}
-              onMouseEnter={() => setHover(true)}
-              onMouseLeave={() => setHover(false)}
-            >
-              Add New Work
-            </Button>
-          </Link>
-        </div>
+        {/* Display "Add Work" button only when user is signed in */}
+        {signedInUser && (
+          <div style={styles.buttonContainer}>
+            <Link to="/NguyenDoThienAn/add-work">
+              <Button
+                style={{
+                  ...styles.buttonStyle,
+                  ...(hover ? styles.buttonHover : {}),
+                }}
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+              >
+                Add New Work
+              </Button>
+            </Link>
+          </div>
+        )}
 
         <div style={styles.pin_container}>
-          {/* Dynamically render WorkCard components from workCards prop */}
-          {workCards.map((card, index) => {
-            console.log("WorkCard textPara:", card.textPara); // Log the textPara here
-
-            return (
-              <WorkCard
-                key={index}
-                id={card.id}
-                size={card.size}
-                img={card.img}
-                text={card.text}
-                pdfUrl={card.pdfUrl}
-                textPara={card.textPara} // Pass textPara to the WorkCard component
-                detailsRoute={card.detailsRoute}
-              />
-            );
-          })}
+          {workCards.map((card, index) => (
+            <WorkCard
+              key={index}
+              id={card.id}
+              size={card.size}
+              img={card.img}
+              text={card.text}
+              pdfUrl={card.pdfUrl}
+              textPara={card.textPara}
+              detailsRoute={card.detailsRoute}
+              signedInUser={signedInUser} // Pass signedInUser to WorkCard
+            />
+          ))}
 
           {/* Static test WorkCard for testing PDF functionality */}
           <WorkCard
@@ -109,6 +107,7 @@ export const Work = ({ workCards }) => {
               "+ Make sure KOL's posts meet up to KPI commitment and report KOL booking campaign",
             ]}
             detailsRoute=""
+            signedInUser={signedInUser} // Pass signedInUser to WorkCard
           />
           <WorkCard
             size="medium"
@@ -127,6 +126,7 @@ export const Work = ({ workCards }) => {
               "+ Catch up job progress and address any issues of the team to solve and give directions",
             ]}
             detailsRoute="/NguyenDoThienAn/HanhPhucInternational"
+            signedInUser={signedInUser} // Pass signedInUser to WorkCard
           />
           <WorkCard
             size="large"
@@ -143,6 +143,7 @@ export const Work = ({ workCards }) => {
               "+ Order, brief internal team and quality control for social media posts",
             ]}
             detailsRoute="/NguyenDoThienAn/HONGKONGMooncake"
+            signedInUser={signedInUser} // Pass signedInUser to WorkCard
           />
           <WorkCard
             size="small"
@@ -155,6 +156,7 @@ export const Work = ({ workCards }) => {
               "+ Brief ideas and quality control for POSM design and manage productions of stakeholders to ensure the quality",
             ]}
             detailsRoute=""
+            signedInUser={signedInUser} // Pass signedInUser to WorkCard
           />
           <WorkCard
             size="medium"
@@ -173,6 +175,7 @@ export const Work = ({ workCards }) => {
               "+ Catch up job progress and address any issues of the team to solve and give directions",
             ]}
             detailsRoute="/NguyenDoThienAn/DrOTEKER"
+            signedInUser={signedInUser} // Pass signedInUser to WorkCard
           />
           <WorkCard
             size="medium"
@@ -190,6 +193,7 @@ export const Work = ({ workCards }) => {
               "+ Catch up job progress and address any issues of the team to solve and give directions",
             ]}
             detailsRoute=""
+            signedInUser={signedInUser} // Pass signedInUser to WorkCard
           />
           <WorkCard
             size="small"
@@ -206,6 +210,7 @@ export const Work = ({ workCards }) => {
               "+ Order, brief internal team and quality control for social media posts",
             ]}
             detailsRoute="/NguyenDoThienAn/HONGKONGMooncake"
+            signedInUser={signedInUser} // Pass signedInUser to WorkCard
           />
         </div>
       </Container>

@@ -788,6 +788,21 @@ iframe {
   margin-bottom: 8px;
 }
 
+/************ Sign in Css ************/
+.sign-out-btn {
+  background-color: #ff5c5c;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.sign-out-btn:hover {
+  background-color: #ff3b3b;
+}
+
 
 
 
