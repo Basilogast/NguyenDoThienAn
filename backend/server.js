@@ -17,11 +17,16 @@ const { Pool } = pkg; // Destructure 'Pool' from 'pg'
 
 // PostgreSQL client setup
 const pool = new Pool({
-  user: 'workcardsuser',
-  host: 'localhost',
-  database: 'workcardsdb',
-  password: 'Hung08112003',
-  port: 5432,
+  // user: 'workcardsuser',
+  // host: 'localhost',
+  // database: 'workcardsdb',
+  // password: 'Hung08112003',
+  // port: 5432,
+  user: 'postgres.gqfnhqrxmjtkoeoopfff',
+  host: 'aws-0-eu-central-1.pooler.supabase.com',
+  database: 'postgres',
+  password: 'Shadowmane@08112003',
+  port: 6543,
 });
 
 // Get __dirname equivalent in ES modules
