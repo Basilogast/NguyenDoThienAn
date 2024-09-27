@@ -43,7 +43,7 @@ const SignInButton = ({ signedInUser, setSignedInUser }) => {
   // Function to handle sign-out
   const handleSignOut = async () => {
     try {
-      const response = await fetch("http://localhost:5000/logout", {
+      const response = await fetch("https://thienanbackend-production.up.railway.app/logout", {
         method: "POST",
         credentials: "include", // Include credentials (session cookies)
       });

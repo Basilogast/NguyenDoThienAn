@@ -32,7 +32,7 @@ function App() {
 
   // Fetch workcards data from the backend
   useEffect(() => {
-    fetch("http://localhost:5000/api/workcards")
+    fetch("https://thienanbackend-production.up.railway.app/api/workcards")
       .then((response) => response.json())
       .then((data) => {
         setWorkCards(data);
@@ -43,7 +43,7 @@ function App() {
   const addNewWorkCard = (formData) => {
     console.log("Posting new workcard to backend:", formData);
 
-    fetch("http://localhost:5000/api/workcards", {
+    fetch("https://thienanbackend-production.up.railway.app/api/workcards", {
       method: "POST",
       body: formData, // Use FormData instead of JSON
     })

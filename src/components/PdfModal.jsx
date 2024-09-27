@@ -16,7 +16,7 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute, id, sign
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/workcards/${id}`, {
+      const response = await fetch(`https://thienanbackend-production.up.railway.app/api/workcards/${id}`, {
         method: "DELETE",
       });
       if (response.ok) {

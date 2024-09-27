@@ -22,7 +22,7 @@ function EditWorkCard() {
     const fetchWorkCard = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/workcards/${id}`
+          `https://thienanbackend-production.up.railway.app/api/workcards/${id}`
         );
         if (response.ok) {
           const data = await response.json();
@@ -86,7 +86,7 @@ function EditWorkCard() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/workcards/${id}`,
+        `https://thienanbackend-production.up.railway.app/api/workcards/${id}`,
         {
           method: "PUT",
           body: formData,
