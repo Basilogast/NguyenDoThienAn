@@ -2,7 +2,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import "animate.css";
 import TrackVisibility from "react-on-screen";
-import heroImg from "../assets/img/heroImg.png";
+import heroImg from "../assets/img/ruou1.jpg";
 
 export const Hero = () => {
   const [loopNum, setLoopNum] = useState(0);
@@ -100,7 +100,7 @@ export const Hero = () => {
             </TrackVisibility>
           </Col>
           <Col xs={0} md={6} xl={6}>
-            <div className="heroImgContainer">
+            <div className="heroImgContainer" style={{filter: "grayscale(100%) saturate(50%)"}}>
               <img src={heroImg} />
             </div>
           </Col>

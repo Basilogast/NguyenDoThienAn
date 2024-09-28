@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import star from "../assets/img/starinhand.png";
-import hero from "../assets/img/heroImg.png";
+import hero from "../assets/img/ruou1.jpg";
 import location from "../assets/img/location.svg";
 import mail from "../assets/img/mail.svg";
 import phone from "../assets/img/phone.svg";
@@ -63,7 +63,7 @@ export const Footer = () => {
             </h2>
           </Col>
           <Col xs={12} md={3} xl={3}>
-            <div className="imgWrapper">
+            <div className="imgWrapper" style={{filter: "grayscale(100%) saturate(50%)"}}>
               <img src={hero} className="profile" alt="profile" />
             </div>
           </Col>
