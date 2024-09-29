@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 // import "./AddWorkCard.css"; // Add custom styles here
 
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../../firebaseConfig"; // Your Firebase config
+
 export const AddWorkCard = ({ addNewWorkCard }) => {
   const [workData, setWorkData] = useState({
     text: "",
@@ -34,35 +37,67 @@ export const AddWorkCard = ({ addNewWorkCard }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const workDataToSend = {
       ...workData,
-      textPara: workData.textPara.split(","), // Split by comma to match array format
+      textPara: workData.textPara.split(","), // Convert comma-separated list to array
     };
-
-    const formData = new FormData();
-    formData.append("text", workDataToSend.text);
-    formData.append("textPara", workDataToSend.textPara);
-    formData.append("detailsRoute", workDataToSend.detailsRoute);
-    formData.append("size", workDataToSend.size);
-
-    if (imgFile) {
-      formData.append("img", imgFile);
+  
+    try {
+      let imgUrl = null;
+      let pdfUrl = null;
+  
+      // Upload the image to Firebase Storage
+      if (imgFile) {
+        const imgRef = ref(storage, `images/${imgFile.name}-${Date.now()}`);
+        const imgSnapshot = await uploadBytes(imgRef, imgFile);
+        imgUrl = await getDownloadURL(imgSnapshot.ref); // Get the download URL of the uploaded image
+        console.log("Image URL:", imgUrl);
+      }
+  
+      // Upload the PDF to Firebase Storage
+      if (pdfFile) {
+        const pdfRef = ref(storage, `pdfs/${pdfFile.name}-${Date.now()}`);
+        const pdfSnapshot = await uploadBytes(pdfRef, pdfFile);
+        pdfUrl = await getDownloadURL(pdfSnapshot.ref); // Get the download URL of the uploaded PDF
+        console.log("PDF URL:", pdfUrl);
+      }
+  
+      // Prepare FormData with the Firebase URLs
+      const formData = new FormData();
+      formData.append("text", workDataToSend.text);
+      formData.append("textPara", workDataToSend.textPara);
+      formData.append("detailsRoute", workDataToSend.detailsRoute);
+      formData.append("size", workDataToSend.size);
+  
+      if (imgUrl) {
+        formData.append("img", imgUrl); // Append the Firebase image URL
+      }
+      if (pdfUrl) {
+        formData.append("pdfUrl", pdfUrl); // Append the Firebase PDF URL
+      }
+  
+      // Log the FormData
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+  
+      // Send the data to the backend
+      if (typeof addNewWorkCard === "function") {
+        addNewWorkCard(formData); // Pass the FormData with Firebase URLs
+      } else {
+        console.error("addNewWorkCard is not a function");
+      }
+  
+      // Navigate back to the homepage after submission
+      navigate("/NguyenDoThienAn/");
+    } catch (error) {
+      console.error("Error uploading files to Firebase:", error);
     }
-    if (pdfFile) {
-      formData.append("pdfUrl", pdfFile);
-    }
-
-    if (typeof addNewWorkCard === "function") {
-      addNewWorkCard(formData); // Pass FormData to the backend
-    } else {
-      console.error("addNewWorkCard is not a function");
-    }
-
-    navigate("/NguyenDoThienAn/");
   };
+  
 
   return (
     <Container style={{paddingTop: "50px"}}>
