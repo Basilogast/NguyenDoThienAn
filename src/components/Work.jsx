@@ -56,7 +56,7 @@ export const Work = ({ workCards, signedInUser }) => {
     <section className="work" id="work">
       <Container>
         <div className="d-flex flex-column align-items-center">
-          <h2>MY DEDICATED WORKS</h2>
+          <h2>EXECUTIONS</h2>
           <hr />
         </div>
 

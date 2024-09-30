@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage"; // Firebase functions
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { storage } from "../../firebaseConfig"; // Your Firebase config
 
 function EditWorkCard() {
@@ -20,13 +20,12 @@ function EditWorkCard() {
   const [imgFileName, setImgFileName] = useState(""); // For storing the current image file name
   const [imgFilePath, setImgFilePath] = useState(""); // For storing the current Firebase image path
   const [pdfFileName, setPdfFileName] = useState(""); // For storing the current PDF file name
+  const [loading, setLoading] = useState(false); // Loading state
 
   useEffect(() => {
     const fetchWorkCard = async () => {
       try {
-        const response = await fetch(
-          `https://thienanbackend-production.up.railway.app/api/${table}/${id}` // Use table in the API request
-        );
+        const response = await fetch(`https://thienanbackend-production.up.railway.app/api/${table}/${id}`); // Use table in the API request
         if (response.ok) {
           const data = await response.json();
           setWorkData({
@@ -70,6 +69,9 @@ function EditWorkCard() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Start loading state
+    setLoading(true);
 
     const formData = new FormData();
     formData.append("text", workData.text);
@@ -116,12 +118,15 @@ function EditWorkCard() {
       if (response.ok) {
         alert("Workcard updated successfully");
         navigate("/NguyenDoThienAn/"); // Redirect to the main page
-        window.location.reload();
+        window.location.reload(); // Reload the page after navigating
       } else {
         alert("Failed to update workcard");
       }
     } catch (error) {
       console.error("Error updating workcard:", error);
+    } finally {
+      // Stop loading state
+      setLoading(false);
     }
   };
 
@@ -220,8 +225,29 @@ function EditWorkCard() {
             />
           </Form.Group>
 
-          <Button variant="primary" type="submit" className="submit-btn">
-            Update WorkCard
+          <Button
+            variant="primary"
+            type="submit"
+            className="submit-btn"
+            disabled={loading} // Disable the button when loading is true
+            style={{
+              cursor: loading ? "progress" : "pointer", // Show loading cursor when submitting
+              opacity: loading ? 0.7 : 1, // Dim the button when loading
+              transition: "opacity 0.3s ease", // Smooth transition effect
+            }}
+          >
+            {loading ? (
+              <>
+                <span
+                  className="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>{" "}
+                Updating WorkCard...
+              </>
+            ) : (
+              "Update WorkCard"
+            )}
           </Button>
         </Form>
       </Container>

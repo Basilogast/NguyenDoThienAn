@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -68,14 +69,17 @@ function App() {
 
   const addNewWorkCard = (formData, targetTable) => {
     console.log("FormData being sent:", [...formData.entries()]); // Log formData
-  
-    fetch(`https://thienanbackend-production.up.railway.app/api/${targetTable}`, {
-      method: "POST",
-      body: formData, // Use FormData instead of JSON
-    })
+
+    fetch(
+      `https://thienanbackend-production.up.railway.app/api/${targetTable}`,
+      {
+        method: "POST",
+        body: formData, // Use FormData instead of JSON
+      }
+    )
       .then((response) => {
         console.log("Server response:", response);
-  
+
         // Check if the content type is JSON before parsing
         const contentType = response.headers.get("content-type");
         if (contentType && contentType.includes("application/json")) {
@@ -96,12 +100,11 @@ function App() {
       })
       .catch((error) => {
         console.error("Error adding card:", error);
-  
+
         // Show an error alert
         alert("An error occurred while adding the card. Please try again.");
       });
   };
-  
 
   return (
     <Router>
@@ -114,8 +117,24 @@ function App() {
               <Hero />
               <About />
               <Client />
-              <Pitching pitchCards={pitchCards} signedInUser={signedInUser} />
-              <Competition comCards={comCards} signedInUser={signedInUser} />
+              <Container>
+                <Row>
+                  <Col xs={12} md={6} xl={6}>
+                    {" "}
+                    <Pitching
+                      pitchCards={pitchCards}
+                      signedInUser={signedInUser}
+                    />
+                  </Col>
+                  <Col xs={12} md={6} xl={6}>
+                    {" "}
+                    <Competition
+                      comCards={comCards}
+                      signedInUser={signedInUser}
+                    />
+                  </Col>
+                </Row>
+              </Container>
               <Work workCards={workCards} signedInUser={signedInUser} />
               <Footer />
               <SignInButton
