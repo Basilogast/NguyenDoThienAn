@@ -4,7 +4,7 @@ import { Container, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function EditWorkCard() {
-  const { id } = useParams(); // Get the workcard ID from the URL
+  const { id, table } = useParams(); // Get both the workcard ID and table from the URL
   const navigate = useNavigate();
 
   const [workData, setWorkData] = useState({
@@ -22,18 +22,18 @@ function EditWorkCard() {
     const fetchWorkCard = async () => {
       try {
         const response = await fetch(
-          `https://thienanbackend-production.up.railway.app/api/workcards/${id}`
+          `https://thienanbackend-production.up.railway.app/api/${table}/${id}` // Use table in the API request
         );
         if (response.ok) {
           const data = await response.json();
           setWorkData({
             text: data.text,
-            textPara: data.textPara.join(", "),
+            textPara: data.textPara.join(", "), // Convert array to comma-separated string
             detailsRoute: data.detailsRoute,
             size: data.size,
           });
-          setImgFileName(data.img.split("/").pop());
-          setPdfFileName(data.pdfUrl.split("/").pop());
+          setImgFileName(data.img ? data.img.split("/").pop() : "");
+          setPdfFileName(data.pdfUrl ? data.pdfUrl.split("/").pop() : "");
 
           // Log file names to ensure they are being set
           console.log("Image File Name:", data.img.split("/").pop());
@@ -47,7 +47,7 @@ function EditWorkCard() {
     };
 
     fetchWorkCard();
-  }, [id]);
+  }, [id, table]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -73,7 +73,7 @@ function EditWorkCard() {
 
     const formData = new FormData();
     formData.append("text", workData.text);
-    formData.append("textPara", workData.textPara.split(","));
+    formData.append("textPara", workData.textPara.split(",")); // Convert to array
     formData.append("detailsRoute", workData.detailsRoute);
     formData.append("size", workData.size);
 
@@ -86,7 +86,7 @@ function EditWorkCard() {
 
     try {
       const response = await fetch(
-        `https://thienanbackend-production.up.railway.app/api/workcards/${id}`,
+        `https://thienanbackend-production.up.railway.app/api/${table}/${id}`, // Use table in the API request
         {
           method: "PUT",
           body: formData,

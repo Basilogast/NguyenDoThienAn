@@ -9,6 +9,8 @@ import { Hero } from "./components/Hero";
 import { About } from "./components/About";
 import { Client } from "./components/Client";
 import { Work } from "./components/Work";
+import { Pitching } from "./components/Pitching"; // Import the refactored Pitching component
+import { Competition } from "./components/Competition";
 import { AddWorkCard } from "./components/AddWorkCard";
 import EditWorkCard from "./components/EditWorkCard";
 import { Footer } from "./components/Footer";
@@ -17,10 +19,15 @@ import { auth, signOut } from "../firebaseConfig"; // Firebase configuration
 
 function App() {
   const [workCards, setWorkCards] = useState([]);
+  const [pitchCards, setPitchCards] = useState([]); // New state for pitch cards
+  const [comCards, setComCards] = useState([]);
   const [signedInUser, setSignedInUser] = useState(null); // Track signed-in user
 
   // List of allowed emails
-  const allowedEmails = ["duyhung08112003@gmail.com", "annguyen20112003@gmail.com"];
+  const allowedEmails = [
+    "duyhung08112003@gmail.com",
+    "annguyen20112003@gmail.com",
+  ];
 
   // Restore session from cookies on app load
   useEffect(() => {
@@ -30,7 +37,7 @@ function App() {
     }
   }, []);
 
-  // Fetch workcards data from the backend
+  // Fetch workcards data from the backend (for main workcards)
   useEffect(() => {
     fetch("https://thienanbackend-production.up.railway.app/api/workcards")
       .then((response) => response.json())
@@ -40,10 +47,29 @@ function App() {
       .catch((error) => console.error("Error fetching workcards:", error));
   }, []);
 
-  const addNewWorkCard = (formData) => {
-    console.log("Posting new workcard to backend:", formData);
+  // Fetch pitchcards data from the backend (for pitching section)
+  useEffect(() => {
+    fetch("https://thienanbackend-production.up.railway.app/api/pitches") // New API endpoint for pitches
+      .then((response) => response.json())
+      .then((data) => {
+        setPitchCards(data);
+      })
+      .catch((error) => console.error("Error fetching pitches:", error));
+  }, []);
 
-    fetch("https://thienanbackend-production.up.railway.app/api/workcards", {
+  useEffect(() => {
+    fetch("https://thienanbackend-production.up.railway.app/api/competition") // New API endpoint for pitches
+      .then((response) => response.json())
+      .then((data) => {
+        setComCards(data);
+      })
+      .catch((error) => console.error("Error fetching pitches:", error));
+  }, []);
+
+  const addNewWorkCard = (formData, targetTable) => {
+    console.log("FormData being sent:", [...formData.entries()]); // Log formData
+
+    fetch(`https://thienanbackend-production.up.railway.app/api/${targetTable}`, {
       method: "POST",
       body: formData, // Use FormData instead of JSON
     })
@@ -59,12 +85,17 @@ function App() {
         }
       })
       .then((addedCard) => {
-        // Add the new workcard to the state
-        setWorkCards([...workCards, addedCard]);
-        console.log("New workcard added:", addedCard);
+        if (targetTable === "workcards") {
+          setWorkCards([...workCards, addedCard]);
+        } else if (targetTable === "pitches") {
+          setPitchCards([...pitchCards, addedCard]);
+        } else if (targetTable === "competition") {
+          setComCards([...comCards, addedCard]);
+        }
+        console.log("New card added:", addedCard);
       })
       .catch((error) => {
-        console.error("Error adding workcard:", error);
+        console.error("Error adding card:", error);
       });
   };
 
@@ -79,6 +110,8 @@ function App() {
               <Hero />
               <About />
               <Client />
+              <Pitching pitchCards={pitchCards} signedInUser={signedInUser} />
+              <Competition comCards={comCards} signedInUser={signedInUser} />
               <Work workCards={workCards} signedInUser={signedInUser} />
               <Footer />
               <SignInButton
@@ -94,16 +127,49 @@ function App() {
             path="/NguyenDoThienAn/add-work"
             element={
               <div className="App">
-                <AddWorkCard addNewWorkCard={addNewWorkCard} />
+                <AddWorkCard
+                  addNewWorkCard={(formData) =>
+                    addNewWorkCard(formData, "workcards")
+                  }
+                />
                 <Footer />
               </div>
             }
           />
         )}
-        {/* Edit Work Route */}
         {signedInUser && allowedEmails.includes(signedInUser.email) && (
           <Route
-            path="/NguyenDoThienAn/edit-work/:id"
+            path="/NguyenDoThienAn/add-pitches"
+            element={
+              <div className="App">
+                <AddWorkCard
+                  addNewWorkCard={(formData) =>
+                    addNewWorkCard(formData, "pitches")
+                  }
+                />
+                <Footer />
+              </div>
+            }
+          />
+        )}
+        {signedInUser && allowedEmails.includes(signedInUser.email) && (
+          <Route
+            path="/NguyenDoThienAn/add-competition"
+            element={
+              <div className="App">
+                <AddWorkCard
+                  addNewWorkCard={(formData) =>
+                    addNewWorkCard(formData, "competition")
+                  }
+                />
+                <Footer />
+              </div>
+            }
+          />
+        )}
+        {signedInUser && allowedEmails.includes(signedInUser.email) && (
+          <Route
+            path="/NguyenDoThienAn/edit-work/:table/:id" // Include :table as a route parameter
             element={
               <div className="App">
                 <EditWorkCard />

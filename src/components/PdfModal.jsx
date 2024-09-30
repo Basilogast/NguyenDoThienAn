@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
-function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute, id, signedInUser }) {
+function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute, id, signedInUser, targetTable }) {
   const textArray = Array.isArray(text) ? text : [];
   const navigate = useNavigate(); // Hook for navigation
 
@@ -15,8 +15,13 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute, id, sign
   }, [pdfUrl]);
 
   const handleDelete = async () => {
+    if (!id || !targetTable) {
+      alert("Invalid workcard ID or table");
+      return;
+    }
+
     try {
-      const response = await fetch(`https://thienanbackend-production.up.railway.app/api/workcards/${id}`, {
+      const response = await fetch(`https://thienanbackend-production.up.railway.app/api/${targetTable}/${id}`, {
         method: "DELETE",
       });
       if (response.ok) {
@@ -33,10 +38,10 @@ function PdfModal({ isOpen, onRequestClose, pdfUrl, text, detailsRoute, id, sign
   };
 
   const handleEdit = () => {
-    // Redirect to the edit page with the workcard ID
-    navigate(`/NguyenDoThienAn/edit-work/${id}`);
+    // Redirect to the edit page with the workcard ID and targetTable
+    navigate(`/NguyenDoThienAn/edit-work/${targetTable}/${id}`);
   };
-
+  
   return (
     <Modal
       isOpen={isOpen}

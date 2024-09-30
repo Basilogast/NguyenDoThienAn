@@ -90,6 +90,7 @@ export const Work = ({ workCards, signedInUser }) => {
               textPara={card.textPara}
               detailsRoute={card.detailsRoute}
               signedInUser={signedInUser} // Pass signedInUser to WorkCard
+              targetTable="workcards"
             />
           ))}
 
