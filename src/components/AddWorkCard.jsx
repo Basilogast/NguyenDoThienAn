@@ -15,6 +15,7 @@ export const AddWorkCard = ({ addNewWorkCard, targetTable }) => {
 
   const [imgFile, setImgFile] = useState(null); // Separate state for image file
   const [pdfFile, setPdfFile] = useState(null); // Separate state for PDF file
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -37,6 +38,9 @@ export const AddWorkCard = ({ addNewWorkCard, targetTable }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Start loading state
+    setLoading(true); // Set the loading state to true when the submission starts
 
     const workDataToSend = {
       ...workData,
@@ -81,15 +85,24 @@ export const AddWorkCard = ({ addNewWorkCard, targetTable }) => {
 
       // Send the data to the backend
       if (typeof addNewWorkCard === "function") {
-        addNewWorkCard(formData); // Pass the FormData with Firebase URLs
+        await addNewWorkCard(formData); // Wait for the work card to be added
+
+        // Show success alert
+        alert("Workcard added successfully!");
+
+        // Stop loading state
+        setLoading(false);
+
+        // Navigate back to the homepage after submission
+        navigate("/NguyenDoThienAn/");
       } else {
         console.error("addNewWorkCard is not a function");
       }
-
-      // Navigate back to the homepage after submission
-      navigate("/NguyenDoThienAn/");
     } catch (error) {
       console.error("Error uploading files to Firebase:", error);
+      alert("An error occurred while uploading files. Please try again.");
+      // Stop loading state in case of an error
+      setLoading(false);
     }
   };
 
@@ -172,8 +185,29 @@ export const AddWorkCard = ({ addNewWorkCard, targetTable }) => {
             </Form.Control>
           </Form.Group>
 
-          <Button variant="primary" type="submit" className="submit-btn">
-            Add {targetTable}
+          <Button
+            variant="primary"
+            type="submit"
+            className="submit-btn"
+            disabled={loading} // Disable the button when loading is true
+            style={{
+              cursor: loading ? "progress" : "pointer", // Show loading cursor when submitting
+              opacity: loading ? 0.7 : 1, // Dim the button when loading
+              transition: "opacity 0.3s ease", // Smooth transition effect
+            }}
+          >
+            {loading ? (
+              <>
+                <span
+                  className="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>{" "}
+                Adding {targetTable}...
+              </>
+            ) : (
+              `Add ${targetTable}`
+            )}
           </Button>
         </Form>
       </Container>

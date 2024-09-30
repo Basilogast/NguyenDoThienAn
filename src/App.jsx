@@ -68,14 +68,14 @@ function App() {
 
   const addNewWorkCard = (formData, targetTable) => {
     console.log("FormData being sent:", [...formData.entries()]); // Log formData
-
+  
     fetch(`https://thienanbackend-production.up.railway.app/api/${targetTable}`, {
       method: "POST",
       body: formData, // Use FormData instead of JSON
     })
       .then((response) => {
         console.log("Server response:", response);
-
+  
         // Check if the content type is JSON before parsing
         const contentType = response.headers.get("content-type");
         if (contentType && contentType.includes("application/json")) {
@@ -85,6 +85,7 @@ function App() {
         }
       })
       .then((addedCard) => {
+        // Add the card to the corresponding state based on the target table
         if (targetTable === "workcards") {
           setWorkCards([...workCards, addedCard]);
         } else if (targetTable === "pitches") {
@@ -92,12 +93,15 @@ function App() {
         } else if (targetTable === "competition") {
           setComCards([...comCards, addedCard]);
         }
-        console.log("New card added:", addedCard);
       })
       .catch((error) => {
         console.error("Error adding card:", error);
+  
+        // Show an error alert
+        alert("An error occurred while adding the card. Please try again.");
       });
   };
+  
 
   return (
     <Router>
@@ -131,6 +135,7 @@ function App() {
                   addNewWorkCard={(formData) =>
                     addNewWorkCard(formData, "workcards")
                   }
+                  targetTable="workcards"
                 />
                 <Footer />
               </div>
@@ -146,6 +151,7 @@ function App() {
                   addNewWorkCard={(formData) =>
                     addNewWorkCard(formData, "pitches")
                   }
+                  targetTable="pitches"
                 />
                 <Footer />
               </div>
@@ -161,6 +167,7 @@ function App() {
                   addNewWorkCard={(formData) =>
                     addNewWorkCard(formData, "competition")
                   }
+                  targetTable="competition"
                 />
                 <Footer />
               </div>
