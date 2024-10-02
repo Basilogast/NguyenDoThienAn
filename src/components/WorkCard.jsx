@@ -37,7 +37,8 @@ function WorkCard({ id, img, text, size, pdfUrl, textPara, detailsRoute, signedI
   };
 
   const isVideo = (url) => {
-    return url && (url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.ogg'));
+    const videoExtensions = ['.mp4', '.webm', '.ogg'];
+    return url && videoExtensions.some(ext => url.toLowerCase().includes(ext));
   };
 
   const cardStyles = {
