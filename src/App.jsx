@@ -18,6 +18,10 @@ import { Footer } from "./components/Footer";
 import SignInButton from "./components/SignInButton"; // Import the sign-in component
 import { auth, signOut } from "../firebaseConfig"; // Firebase configuration
 
+import {HONGKONG} from "./components/workpage/HONGKONG";
+import {HP} from "./components/workpage/HP";
+import {OTEKER} from "./components/workpage/OTEKER";
+
 function App() {
   const [workCards, setWorkCards] = useState([]);
   const [pitchCards, setPitchCards] = useState([]); // New state for pitch cards
@@ -144,6 +148,37 @@ function App() {
             </div>
           }
         />
+
+        <Route
+          path="/NguyenDoThienAn/HONGKONGMooncake"
+          element={
+            <div className="App">
+              <HONGKONG />
+              <Footer />
+            </div>
+          }
+        />
+
+        <Route
+          path="/NguyenDoThienAn/HanhPhucInternational"
+          element={
+            <div className="App">
+              <HP />
+              <Footer />
+            </div>
+          }
+        />
+
+        <Route
+          path="/NguyenDoThienAn/DrOTEKER"
+          element={
+            <div className="App">
+              <OTEKER />
+              <Footer />
+            </div>
+          }
+        />
+
         {/* Add Work Route - Only allow access if signed in and email is in allowedEmails */}
         {signedInUser && allowedEmails.includes(signedInUser.email) && (
           <Route
