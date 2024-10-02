@@ -13,8 +13,8 @@ export const AddWorkCard = ({ addNewWorkCard, targetTable }) => {
     size: "small", // Default size
   });
 
-  const [imgFile, setImgFile] = useState(null); // Separate state for image file
-  const [pdfFile, setPdfFile] = useState(null); // Separate state for PDF file
+  const [imgFile, setImgFile] = useState(null); // State for image/video file
+  const [pdfFile, setPdfFile] = useState(null); // State for PDF or media file
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -30,9 +30,9 @@ export const AddWorkCard = ({ addNewWorkCard, targetTable }) => {
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     if (name === "img") {
-      setImgFile(files[0]); // Set the image file
+      setImgFile(files[0]); // Set the image or video file
     } else if (name === "pdfUrl") {
-      setPdfFile(files[0]); // Set the PDF file
+      setPdfFile(files[0]); // Set the PDF or media file
     }
   };
 
@@ -40,7 +40,7 @@ export const AddWorkCard = ({ addNewWorkCard, targetTable }) => {
     e.preventDefault();
 
     // Start loading state
-    setLoading(true); // Set the loading state to true when the submission starts
+    setLoading(true);
 
     const workDataToSend = {
       ...workData,
@@ -51,20 +51,20 @@ export const AddWorkCard = ({ addNewWorkCard, targetTable }) => {
       let imgUrl = null;
       let pdfUrl = null;
 
-      // Upload the image to Firebase Storage
+      // Upload the image or video to Firebase Storage
       if (imgFile) {
         const imgRef = ref(storage, `images/${imgFile.name}-${Date.now()}`);
         const imgSnapshot = await uploadBytes(imgRef, imgFile);
-        imgUrl = await getDownloadURL(imgSnapshot.ref); // Get the download URL of the uploaded image
-        console.log("Image URL:", imgUrl);
+        imgUrl = await getDownloadURL(imgSnapshot.ref); // Get the download URL
+        console.log("Image/Video URL:", imgUrl);
       }
 
-      // Upload the PDF to Firebase Storage
+      // Upload the PDF, image, or video to Firebase Storage
       if (pdfFile) {
-        const pdfRef = ref(storage, `pdfs/${pdfFile.name}-${Date.now()}`);
+        const pdfRef = ref(storage, `files/${pdfFile.name}-${Date.now()}`);
         const pdfSnapshot = await uploadBytes(pdfRef, pdfFile);
-        pdfUrl = await getDownloadURL(pdfSnapshot.ref); // Get the download URL of the uploaded PDF
-        console.log("PDF URL:", pdfUrl);
+        pdfUrl = await getDownloadURL(pdfSnapshot.ref); // Get the download URL
+        console.log("PDF/Media URL:", pdfUrl);
       }
 
       // Prepare FormData with the Firebase URLs and target table
@@ -75,10 +75,10 @@ export const AddWorkCard = ({ addNewWorkCard, targetTable }) => {
       formData.append("size", workDataToSend.size);
 
       if (imgUrl) {
-        formData.append("img", imgUrl); // Append the Firebase image URL
+        formData.append("img", imgUrl); // Append the Firebase image/video URL
       }
       if (pdfUrl) {
-        formData.append("pdfUrl", pdfUrl); // Append the Firebase PDF URL
+        formData.append("pdfUrl", pdfUrl); // Append the Firebase PDF/media URL
       }
 
       formData.append("targetTable", targetTable); // Pass the target table to the backend
@@ -101,8 +101,7 @@ export const AddWorkCard = ({ addNewWorkCard, targetTable }) => {
     } catch (error) {
       console.error("Error uploading files to Firebase:", error);
       alert("An error occurred while uploading files. Please try again.");
-      // Stop loading state in case of an error
-      setLoading(false);
+      setLoading(false); // Stop loading state in case of an error
     }
   };
 
@@ -140,22 +139,22 @@ export const AddWorkCard = ({ addNewWorkCard, targetTable }) => {
           </Form.Group>
 
           <Form.Group controlId="formWorkImage" className="form-group">
-            <Form.Label>Image</Form.Label>
+            <Form.Label>Image/Video</Form.Label>
             <Form.Control
               type="file"
               name="img"
-              accept="image/*"
+              accept="image/*,video/*" // Accept both images and videos
               onChange={handleFileChange}
               required
             />
           </Form.Group>
 
           <Form.Group controlId="formWorkPdf" className="form-group">
-            <Form.Label>PDF File</Form.Label>
+            <Form.Label>PDF/Image/Video</Form.Label>
             <Form.Control
               type="file"
               name="pdfUrl"
-              accept=".pdf"
+              accept=".pdf,image/*,video/*" // Accept PDFs, images, or videos
               onChange={handleFileChange}
             />
           </Form.Group>

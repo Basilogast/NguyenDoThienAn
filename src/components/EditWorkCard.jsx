@@ -15,12 +15,12 @@ function EditWorkCard() {
     detailsRoute: "",
     size: "small", // Default size
   });
-  const [imgFile, setImgFile] = useState(null); // State to handle image file
-  const [pdfFile, setPdfFile] = useState(null); // State to handle PDF file
-  const [imgFileName, setImgFileName] = useState(""); // For storing the current image file name
-  const [imgFilePath, setImgFilePath] = useState(""); // For storing the current Firebase image path
-  const [pdfFileName, setPdfFileName] = useState(""); // For storing the current PDF file name
+  const [mediaFile, setMediaFile] = useState(null); // State to handle media (img/video) file
+  const [pdfFile, setPdfFile] = useState(null); // State to handle pdf/video/img file
   const [loading, setLoading] = useState(false); // Loading state
+  const [mediaFileName, setMediaFileName] = useState(""); // For storing the current media file name
+  const [mediaFilePath, setMediaFilePath] = useState(""); // For storing the current Firebase media path
+  const [pdfFileName, setPdfFileName] = useState(""); // For storing the current PDF file name
 
   useEffect(() => {
     const fetchWorkCard = async () => {
@@ -34,8 +34,8 @@ function EditWorkCard() {
             detailsRoute: data.detailsRoute,
             size: data.size,
           });
-          setImgFileName(data.img ? data.img.split("/").pop() : "");
-          setImgFilePath(data.img || ""); // Store the Firebase path for deletion
+          setMediaFileName(data.img ? data.img.split("/").pop() : "");
+          setMediaFilePath(data.img || ""); // Store the Firebase path for deletion
           setPdfFileName(data.pdfUrl ? data.pdfUrl.split("/").pop() : "");
         } else {
           console.error("Failed to fetch workcard data");
@@ -59,10 +59,10 @@ function EditWorkCard() {
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     if (name === "img") {
-      setImgFile(files[0]); // Set new image file
-      setImgFileName(files[0].name); // Display the file name in the input
+      setMediaFile(files[0]); // Set new media file (img/video)
+      setMediaFileName(files[0].name); // Display the file name in the input
     } else if (name === "pdfUrl") {
-      setPdfFile(files[0]); // Set new PDF file
+      setPdfFile(files[0]); // Set new PDF or media file
       setPdfFileName(files[0].name); // Display the file name in the input
     }
   };
@@ -73,38 +73,50 @@ function EditWorkCard() {
     // Start loading state
     setLoading(true);
 
-    const formData = new FormData();
-    formData.append("text", workData.text);
-    formData.append("textPara", workData.textPara.split(",")); // Convert to array
-    formData.append("detailsRoute", workData.detailsRoute);
-    formData.append("size", workData.size);
+    const workDataToSend = {
+      ...workData,
+      textPara: workData.textPara.split(",").map((item) => item.trim()), // Convert comma-separated list to array
+    };
 
-    let newImgUrl = imgFilePath; // Retain the old image path by default
+    let newMediaUrl = mediaFilePath; // Retain the old media path by default
+    let newPdfUrl = null;
 
     try {
-      // If a new image is uploaded, delete the old image and upload the new one to Firebase
-      if (imgFile) {
-        // Delete the old image from Firebase
-        if (imgFilePath) {
-          const oldImgRef = ref(storage, imgFilePath);
-          await deleteObject(oldImgRef);
-          console.log("Old image deleted from Firebase:", imgFilePath);
+      // If a new media (image/video) is uploaded, delete the old one and upload the new one
+      if (mediaFile) {
+        if (mediaFilePath) {
+          const oldMediaRef = ref(storage, mediaFilePath);
+          await deleteObject(oldMediaRef);
+          console.log("Old media deleted from Firebase:", mediaFilePath);
         }
 
-        // Upload the new image to Firebase
-        const newImgRef = ref(storage, `images/${imgFile.name}-${Date.now()}`);
-        const imgSnapshot = await uploadBytes(newImgRef, imgFile);
-        newImgUrl = await getDownloadURL(imgSnapshot.ref); // Get the download URL of the uploaded image
-        console.log("New Image URL:", newImgUrl);
-        formData.append("img", newImgUrl); // Update the form data with the new image URL
+        // Upload the new media (img/video) to Firebase
+        const newMediaRef = ref(storage, `media/${mediaFile.name}-${Date.now()}`);
+        const mediaSnapshot = await uploadBytes(newMediaRef, mediaFile);
+        newMediaUrl = await getDownloadURL(mediaSnapshot.ref); // Get the download URL of the uploaded media
+        console.log("New Media URL:", newMediaUrl);
       }
 
-      // If a new PDF is uploaded, append it to the formData
+      // If a new PDF or media (image/video) is uploaded, upload it to Firebase
       if (pdfFile) {
-        const pdfRef = ref(storage, `pdfs/${pdfFile.name}-${Date.now()}`);
-        const pdfSnapshot = await uploadBytes(pdfRef, pdfFile);
-        const newPdfUrl = await getDownloadURL(pdfSnapshot.ref); // Get the download URL of the uploaded PDF
-        formData.append("pdfUrl", newPdfUrl);
+        const newPdfRef = ref(storage, `pdf/${pdfFile.name}-${Date.now()}`);
+        const pdfSnapshot = await uploadBytes(newPdfRef, pdfFile);
+        newPdfUrl = await getDownloadURL(pdfSnapshot.ref); // Get the download URL of the uploaded PDF/media
+        console.log("New PDF/Media URL:", newPdfUrl);
+      }
+
+      // Prepare FormData with the updated data
+      const formData = new FormData();
+      formData.append("text", workDataToSend.text);
+      formData.append("textPara", workDataToSend.textPara);
+      formData.append("detailsRoute", workDataToSend.detailsRoute);
+      formData.append("size", workDataToSend.size);
+
+      if (newMediaUrl) {
+        formData.append("img", newMediaUrl); // Append the new media URL (image/video)
+      }
+      if (newPdfUrl) {
+        formData.append("pdfUrl", newPdfUrl); // Append the new PDF or media URL
       }
 
       const response = await fetch(
@@ -118,7 +130,7 @@ function EditWorkCard() {
       if (response.ok) {
         alert("Workcard updated successfully");
         navigate("/NguyenDoThienAn/"); // Redirect to the main page
-        window.location.reload(); // Reload the page after navigating
+        window.location.reload();
       } else {
         alert("Failed to update workcard");
       }
@@ -192,34 +204,32 @@ function EditWorkCard() {
           </Form.Group>
 
           <Form.Group controlId="formWorkImage" className="form-group">
-            <Form.Label className="form-label">Current Image</Form.Label>
-            {/* Display the current image file name */}
-            {imgFileName ? (
-              <p>Current Image: {imgFileName}</p>
+            <Form.Label className="form-label">Current Image/Video</Form.Label>
+            {mediaFileName ? (
+              <p>Current Media: {mediaFileName}</p>
             ) : (
-              <p>No image uploaded</p>
+              <p>No media uploaded</p>
             )}
             <Form.Control
               type="file"
               name="img"
-              accept="image/*"
+              accept="image/*,video/*"
               onChange={handleFileChange}
               className="form-control"
             />
           </Form.Group>
 
           <Form.Group controlId="formWorkPdf" className="form-group">
-            <Form.Label className="form-label">Current PDF</Form.Label>
-            {/* Display the current PDF file name */}
+            <Form.Label className="form-label">Current PDF/Image/Video</Form.Label>
             {pdfFileName ? (
-              <p>Current PDF: {pdfFileName}</p>
+              <p>Current PDF/Media: {pdfFileName}</p>
             ) : (
-              <p>No PDF uploaded</p>
+              <p>No PDF/Media uploaded</p>
             )}
             <Form.Control
               type="file"
               name="pdfUrl"
-              accept=".pdf"
+              accept=".pdf,image/*,video/*"
               onChange={handleFileChange}
               className="form-control"
             />
