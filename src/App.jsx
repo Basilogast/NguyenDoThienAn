@@ -18,9 +18,12 @@ import { Footer } from "./components/Footer";
 import SignInButton from "./components/SignInButton"; // Import the sign-in component
 import { auth, signOut } from "../firebaseConfig"; // Firebase configuration
 
-import {HONGKONG} from "./components/workpage/HONGKONG";
-import {HP} from "./components/workpage/HP";
-import {OTEKER} from "./components/workpage/OTEKER";
+import { HONGKONG } from "./components/workpage/HONGKONG";
+import { HP } from "./components/workpage/HP";
+import { OTEKER } from "./components/workpage/OTEKER";
+
+import { getBlogData } from "./lib/blog"; // Import the blog fetching function
+import BlogPage from "./components/BlogPage";
 
 function App() {
   const [workCards, setWorkCards] = useState([]);
@@ -110,6 +113,17 @@ function App() {
       });
   };
 
+  const [blogs, setBlogs] = useState([]);
+
+  // Fetch blog data when the component mounts
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getBlogData();
+      setBlogs(data);
+    }
+    fetchData();
+  }, []);
+
   return (
     <Router>
       <Routes>
@@ -174,6 +188,17 @@ function App() {
           element={
             <div className="App">
               <OTEKER />
+              <Footer />
+            </div>
+          }
+        />
+
+        {/* Route to render individual blog details */}
+        <Route
+          path="/NguyenDoThienAn/blog/:slug"
+          element={
+            <div className="App">
+              <BlogPage />
               <Footer />
             </div>
           }

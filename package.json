@@ -12,6 +12,9 @@
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@sanity/block-content-to-react": "^3.0.0",
+    "@sanity/client": "^6.22.1",
+    "@sanity/image-url": "^1.0.2",
     "express-session": "^1.18.0",
     "firebase": "^10.13.2",
     "ionicons": "^7.4.0",
