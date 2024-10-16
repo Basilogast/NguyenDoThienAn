@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 import { storage } from "../../firebaseConfig"; // Your Firebase config
 
 function EditWorkCard() {
@@ -25,12 +30,14 @@ function EditWorkCard() {
   useEffect(() => {
     const fetchWorkCard = async () => {
       try {
-        const response = await fetch(`https://thienanbackend-production.up.railway.app/api/${table}/${id}`); // Use table in the API request
+        const response = await fetch(
+          `https://thienanbackend-production.up.railway.app/api/${table}/${id}`
+        ); // Use table in the API request
         if (response.ok) {
           const data = await response.json();
           setWorkData({
             text: data.text,
-            textPara: data.textPara.join(", "), // Convert array to comma-separated string
+            textPara: data.textPara.join("\n"), // Convert array to comma-separated string
             detailsRoute: data.detailsRoute,
             size: data.size,
           });
@@ -69,13 +76,13 @@ function EditWorkCard() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Start loading state
     setLoading(true);
 
     const workDataToSend = {
       ...workData,
-      textPara: workData.textPara.split(",").map((item) => item.trim()), // Convert comma-separated list to array
+      textPara:  JSON.stringify(workData.textPara.split("\n").filter((item) => item.trim() !== "")) // Convert comma-separated list to array
     };
 
     let newMediaUrl = mediaFilePath; // Retain the old media path by default
@@ -91,7 +98,10 @@ function EditWorkCard() {
         }
 
         // Upload the new media (img/video) to Firebase
-        const newMediaRef = ref(storage, `media/${mediaFile.name}-${Date.now()}`);
+        const newMediaRef = ref(
+          storage,
+          `media/${mediaFile.name}-${Date.now()}`
+        );
         const mediaSnapshot = await uploadBytes(newMediaRef, mediaFile);
         newMediaUrl = await getDownloadURL(mediaSnapshot.ref); // Get the download URL of the uploaded media
         console.log("New Media URL:", newMediaUrl);
@@ -164,7 +174,7 @@ function EditWorkCard() {
 
           <Form.Group controlId="formWorkTextPara" className="form-group">
             <Form.Label className="form-label">
-              Description (Comma separated)
+              Description (Enter for new line)
             </Form.Label>
             <Form.Control
               as="textarea"
@@ -220,7 +230,9 @@ function EditWorkCard() {
           </Form.Group>
 
           <Form.Group controlId="formWorkPdf" className="form-group">
-            <Form.Label className="form-label">Current PDF/Image/Video</Form.Label>
+            <Form.Label className="form-label">
+              Current PDF/Image/Video
+            </Form.Label>
             {pdfFileName ? (
               <p>Current PDF/Media: {pdfFileName}</p>
             ) : (

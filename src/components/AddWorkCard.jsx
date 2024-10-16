@@ -44,7 +44,7 @@ export const AddWorkCard = ({ addNewWorkCard, targetTable }) => {
 
     const workDataToSend = {
       ...workData,
-      textPara: workData.textPara.split(","), // Convert comma-separated list to array
+      textPara: JSON.stringify(workData.textPara.split("\n").filter((item) => item.trim() !== "")),
     };
 
     try {
@@ -126,11 +126,11 @@ export const AddWorkCard = ({ addNewWorkCard, targetTable }) => {
           </Form.Group>
 
           <Form.Group controlId="formWorkTextPara" className="form-group">
-            <Form.Label>Description (Comma separated list)</Form.Label>
+            <Form.Label>Description (Enter for new line)</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
-              placeholder="Enter description (separated by commas)"
+              placeholder="Enter description"
               name="textPara"
               value={workData.textPara}
               onChange={handleInputChange}
