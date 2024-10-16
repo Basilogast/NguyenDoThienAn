@@ -15,6 +15,7 @@ import { Competition } from "./components/Competition";
 import { AddWorkCard } from "./components/AddWorkCard";
 import EditWorkCard from "./components/EditWorkCard";
 import { Footer } from "./components/Footer";
+import NotFound from "./components/NotFound";
 import SignInButton from "./components/SignInButton"; // Import the sign-in component
 import { auth, signOut } from "../firebaseConfig"; // Firebase configuration
 
@@ -264,6 +265,8 @@ function App() {
             }
           />
         )}
+        {/* Catch-all route for undefined paths */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
